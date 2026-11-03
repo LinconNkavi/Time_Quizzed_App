@@ -168,7 +168,7 @@ function renderQuestion() {
     nextBtn.textContent = 'Submit ✅';
     nextBtn.classList.add('btn-submit');
   } else {
-    nextBtn.textContent = 'Next ➡️';
+    nextBtn.textContent = 'Next';
     nextBtn.classList.remove('btn-submit');
   }
 
