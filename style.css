@@ -286,3 +286,12 @@ p {
   background: var(--leaderboard-bg);
   color: var(--text-color);
 }
+
+/* Trophy Icon Styling */
+.trophy-icon {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 6px;
+  object-fit: contain;
+}
