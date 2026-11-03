@@ -102,7 +102,7 @@ function stopQuestionTimer() {
 // --- PAUSE / RESUME LOGIC ---
 function togglePause() {
   const attempted = state.userAnswers[state.currentIndex] !== null;
-  if (attempted) return; // Don't pause already completed questions
+  if (attempted) return; 
 
   state.isPaused = !state.isPaused;
   const buttons = optionsContainer.querySelectorAll('.option-btn');
@@ -118,31 +118,20 @@ function togglePause() {
   }
 }
 
+// --- TIMEOUT LOGIC ---
 function handleTimeout() {
-  const currentQ = state.questions[state.currentIndex];
+  stopQuestionTimer();
   
-  state.userAnswers[state.currentIndex] = {
-    selected: "Timed Out (No Answer)",
-    isCorrect: false
-  };
+  // Mark current unattempted question as null (skipped)
+  state.userAnswers[state.currentIndex] = null;
 
-  state.missedQuestions.push({
-    question: currentQ.question,
-    userAnswer: "Timed Out (No Answer)",
-    correctAnswer: currentQ.answer
-  });
-
-  const buttons = optionsContainer.querySelectorAll('.option-btn');
-  buttons.forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent === currentQ.answer) {
-      btn.classList.add('correct');
-    }
-  });
-
-  setTimeout(() => {
-    autoAdvance();
-  }, 2000);
+  // Jump straight to next question or results without showing answers
+  if (state.currentIndex < state.questions.length - 1) {
+    state.currentIndex++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
 }
 
 // --- UI RENDER FUNCTIONS ---
@@ -168,7 +157,7 @@ function renderQuestion() {
     nextBtn.textContent = 'Submit ✅';
     nextBtn.classList.add('btn-submit');
   } else {
-    nextBtn.textContent = 'Next';
+    nextBtn.textContent = 'Next ➡️';
     nextBtn.classList.remove('btn-submit');
   }
 
@@ -194,7 +183,7 @@ function renderQuestion() {
       if (opt === currentQ.answer) {
         btn.classList.add('correct');
       }
-      if (opt === userAns.selected && !userAns.isCorrect) {
+      if (userAns && opt === userAns.selected && !userAns.isCorrect) {
         btn.classList.add('incorrect');
       }
     } else {
@@ -223,12 +212,6 @@ function handleOptionSelect(selectedOption, clickedBtn) {
         btn.classList.add('correct');
       }
     });
-
-    state.missedQuestions.push({
-      question: currentQ.question,
-      userAnswer: selectedOption,
-      correctAnswer: currentQ.answer
-    });
   }
 
   state.userAnswers[state.currentIndex] = {
@@ -237,16 +220,7 @@ function handleOptionSelect(selectedOption, clickedBtn) {
   };
 }
 
-function autoAdvance() {
-  if (state.currentIndex < state.questions.length - 1) {
-    state.currentIndex++;
-    renderQuestion();
-  } else {
-    showResults();
-  }
-}
-
-// --- RESULTS & LEADERBOARD ---
+// --- RESULTS & LEADERBOARD (Dynamically collects incorrect & skipped questions) ---
 
 function showResults() {
   stopQuestionTimer();
@@ -254,6 +228,19 @@ function showResults() {
 
   quizScreen.classList.add('hidden');
   resultScreen.classList.remove('hidden');
+
+  // Automatically build review list for both incorrect AND skipped (null) answers
+  state.missedQuestions = [];
+  state.questions.forEach((q, index) => {
+    const ans = state.userAnswers[index];
+    if (!ans || !ans.isCorrect) {
+      state.missedQuestions.push({
+        question: q.question,
+        userAnswer: ans ? ans.selected : "Skipped (No Answer)",
+        correctAnswer: q.answer
+      });
+    }
+  });
 
   const percentage = Math.round((state.score / state.questions.length) * 100);
   finalScore.textContent = `${state.score} / ${state.questions.length}`;
@@ -363,6 +350,16 @@ prevBtn.addEventListener('click', () => {
 });
 
 nextBtn.addEventListener('click', () => {
+  const attempted = state.userAnswers[state.currentIndex] !== null;
+
+  if (!attempted) {
+    const confirmProceed = confirm("Are you sure you want to proceed without an answer?");
+    if (!confirmProceed) {
+      return; 
+    }
+    state.userAnswers[state.currentIndex] = null;
+  }
+
   if (state.currentIndex < state.questions.length - 1) {
     state.currentIndex++;
     renderQuestion();
