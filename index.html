@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Quiz App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Theme Switcher Header -->
+    <div class="top-bar">
+      <button id="theme-toggle-btn" class="theme-btn">☀️ Light Mode</button>
+    </div>
+    
+    <!-- 1. START SCREEN -->
+    <div id="start-screen">
+      <h1>Knowledge Quiz</h1>
+      <div class="info-box">
+        <p><strong>Total Questions:</strong> 15</p>
+        <p><strong>Time Limit Per Question:</strong> 15 seconds</p>
+        <p><strong>Anti-Cheat Active:</strong> Attempted questions cannot be changed when navigating back.</p>
+      </div>
+
+      <div style="text-align: center;">
+        <button id="start-btn" class="btn">Start Quiz</button>
+      </div>
+
+      <div class="leaderboard">
+        <h3>🏆 Top 5 Leaderboard</h3>
+        <ol id="leaderboard-list">
+          <li>No high scores recorded yet.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 2. QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden">
+      <div id="alert-banner" class="alert-box hidden">
+        ⚠️ This question has already been attempted! You cannot change your answer.
+      </div>
+
+      <div class="quiz-header">
+        <span id="question-tracker">Question 1 / 15</span>
+        <div class="header-right">
+          <button id="pause-btn" class="pause-btn">⏸️ Pause</button>
+          <span id="timer-display" class="timer-badge">⏳ 15s</span>
+        </div>
+      </div>
+
+      <h2 id="question-text">Question goes here...</h2>
+
+      <div id="options-container" class="options-container">
+        <!-- Options rendered dynamically -->
+      </div>
+
+      <div class="navigation-controls">
+        <button id="prev-btn" class="btn btn-secondary">⬅️ Back</button>
+        <button id="next-btn" class="btn">Next ➡️</button>
+      </div>
+    </div>
+
+    <!-- 3. METRICS / TERMINAL SCREEN -->
+    <div id="result-screen" class="hidden">
+      <h1>Quiz Complete!</h1>
+      <div class="info-box" style="text-align: center;">
+        <p>Final Score: <strong id="final-score">0 / 15</strong> (<span id="final-percentage">0%</span>)</p>
+        <p>Total Time Taken: <strong id="total-time">0</strong> seconds</p>
+      </div>
+
+      <form id="save-score-form" class="save-score-form">
+        <input type="text" id="username" placeholder="Enter your name" required />
+        <button type="submit" class="btn">Save Score</button>
+      </form>
+
+      <div id="review-section">
+        <h3>Missed Questions Review</h3>
+        <div id="review-container" class="review-container">
+          <!-- Missed questions injected here -->
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button id="restart-btn" class="btn btn-secondary">Retake the Quiz Test</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts loaded sequentially -->
+  <script src="question.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
