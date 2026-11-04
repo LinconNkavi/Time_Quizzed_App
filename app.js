@@ -157,7 +157,7 @@ function renderQuestion() {
     nextBtn.textContent = 'Submit ✅';
     nextBtn.classList.add('btn-submit');
   } else {
-    nextBtn.textContent = 'Next ➡️';
+    nextBtn.textContent = 'Next';
     nextBtn.classList.remove('btn-submit');
   }
 
@@ -293,6 +293,13 @@ function saveHighScore(e) {
 
   if (!name) return;
 
+  // NEW: Check if the name contains any numbers (digits)
+  if (/\d/.test(name)) {
+    alert("Please enter a valid name using letters only (numbers are not allowed).");
+    usernameInput.value = ''; // Clear the invalid input
+    return;
+  }
+
   const percentage = Math.round((state.score / state.questions.length) * 100);
   const newEntry = {
     name: name,
@@ -312,6 +319,7 @@ function saveHighScore(e) {
   saveScoreForm.classList.add('hidden');
   loadLeaderboard();
   resetToHome();
+}
 }
 
 function resetToHome() {
