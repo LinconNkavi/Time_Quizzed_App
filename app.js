@@ -247,9 +247,14 @@ function showResults() {
   finalPercentage.textContent = `${percentage}%`;
   totalTime.textContent = state.totalTimeElapsed;
 
-  reviewContainer.innerHTML = '';
+ reviewContainer.innerHTML = '';
   if (state.missedQuestions.length === 0) {
-    reviewContainer.innerHTML = '<p style="color:#0fd461; text-align:center;">🎉 Perfect score! No missed questions to review.</p>';
+    reviewContainer.innerHTML = `
+      <div style="text-align: center; padding: 10px;">
+        <img src="congrats.jpg" alt="Perfect Score" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; border: 2px solid #0fd461;" />
+        <p style="color:#0fd461; font-weight: bold;">Congratulations! No missed questions to review.</p>
+      </div>
+    `;
   } else {
     state.missedQuestions.forEach(item => {
       const div = document.createElement('div');
