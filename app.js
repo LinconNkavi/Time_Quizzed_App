@@ -79,7 +79,7 @@ function initQuiz() {
 // --- TIMER CONTROLS ---
 function startQuestionTimer() {
   clearInterval(state.timerInterval);
-  state.timer = 15;
+  state.timer = QUESTION_TIME_LIMIT; // Uses your configuration constant
   timerDisplay.textContent = `⏳ ${state.timer}s`;
 
   state.timerInterval = setInterval(() => {
