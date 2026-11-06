@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const QUESTION_TIME_LIMIT = 50; // <--- CHANGE THIS NUMBER ANY TIME YOU WANT (e.g., 20, 30, etc.)
+const QUESTION_TIME_LIMIT = 15; // <--- CHANGE THIS NUMBER ANY TIME YOU WANT (e.g., 20, 30, etc.)
 
 // --- APPLICATION STATE ---
 let state = {
